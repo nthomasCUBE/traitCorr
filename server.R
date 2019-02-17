@@ -17,7 +17,7 @@ server <- function(input, output, session)
 		v$file1=input$file1
 		add_transcriptomics()
 		v$transcriptomics=read.csv(input$file1$datapath,sep="\t",header=T)
-		shinyalert("INFO", "transcriptome was uploaded!", type = "info")
+		shinyalert("INFO", paste(dim(v$transcriptomics)[1],"transcripts from ",dim(v$transcriptomics)[2]," samples was uploaded!"), type = "info")
 	})
 
 	#	----------------------------------------------
@@ -28,6 +28,14 @@ server <- function(input, output, session)
 		v$file2=input$file2
 		add_trait_information()
 		v$trait=read.csv(input$file2$datapath,sep="\t",header=T)
-		shinyalert("INFO", "trait information was uploaded!", type = "info")
+		shinyalert("INFO", paste(dim(v$trait)[1],"entries loaded for the trait information was uploaded!"), type = "info")
+	})
+	
+	#	----------------------------------------------
+	#	Calculation of transcriptomics and traits
+	#	----------------------------------------------
+	observeEvent(input$goButton,{
+		source("methods.R")
+		calc_cmp_transcriptomics_traits(v)
 	})
 }

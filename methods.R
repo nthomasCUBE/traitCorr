@@ -13,3 +13,10 @@ add_trait_information=function(){
 	print(c("INFO|add_trait_information"))
 }
 
+calc_cmp_transcriptomics_traits=function(v){
+	print(c("INFO|transcriptomics VS traits"))
+	print(dim(v$transcriptomics))
+	print(dim(v$trait))
+}
+
+
