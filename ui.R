@@ -5,6 +5,7 @@ library(shinyBS)
 library(shinyjs)
 library(shinythemes)
 
+options(stringsAsFactors=FALSE)
 options(shiny.maxRequestSize = 50*1024^2)
 
 ui <- fluidPage(  
