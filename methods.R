@@ -1,7 +1,8 @@
 library(d3heatmap)
+library(gplots)
+library(VennDiagram)
 library(scales)
 library(xlsx)
-library(gplots)
 
 options(stringsAsFactors=FALSE)
 
@@ -27,12 +28,13 @@ calc_cmp_transcriptomics_traits=function(v){
 		tabPanel("Compare", 			
 		isolate(selectInput("phen1", "Phenotype-1",choices=cn)),
 		isolate(selectInput("phen2", "Phenotype-2",choices=cn)),
-		isolate(selectInput("phen3", "Phenotype-3",choices=cn)),
+		#isolate(selectInput("phen3", "Phenotype-3",choices=cn)),
 		isolate(actionButton("go_alpha3", "Go!"))
 	))
 }
 
 cmp_traits=function(v,my_trait1,my_trait2){
+	print("INFO|cmp_traits")
 	A=(colnames(v$transcriptomics))
 	B=v$trait[,1]
 	AB=B[B%in%A]
@@ -42,21 +44,26 @@ cmp_traits=function(v,my_trait1,my_trait2){
 	for(x in 1:N){
 		iy=which(colnames(v$trait)==my_trait1)
 		T1=as.numeric(v$trait[ix,iy])
-		T2=unlist(v$transcriptomics[x,AB])
+		T2=as.numeric(unlist(v$transcriptomics[x,AB]))
 		my_p=(cor.test(T1,T2))
-		if(my_p<0.05){
+		if(my_p$p.value<0.05){
 			SET_A=c(SET_A,v$transcriptomics[x,1])
 		}
 		iy=which(colnames(v$trait)==my_trait2)
 		T1=as.numeric(v$trait[ix,iy])
-		T2=unlist(v$transcriptomics[x,AB])
+		T2=as.numeric(unlist(v$transcriptomics[x,AB]))
 		my_p=(cor.test(T1,T2))
-		if(my_p<0.05){
+		if(my_p$p.value<0.05){
 			SET_B=c(SET_B,v$transcriptomics[x,1])
 		}
 	}
-	print(SET_A)
-	print(SET_B)
+	area1=SET_A[!(SET_A%in%SET_B)]
+	area2=SET_B[!(SET_B%in%SET_A)]
+	cross=SET_A[SET_A%in%SET_B]
+	area1=length(area1)
+	area2=length(area2)
+	cross=length(cross)
+	draw.pairwise.venn(area1 = area1, area2 = area2, cross.area = cross, category = c(my_trait1,my_trait2))
 }
 
 make_corr=function(v,my_trait){

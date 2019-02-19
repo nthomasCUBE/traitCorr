@@ -53,4 +53,15 @@ server <- function(input, output, session)
 			make_corr(v,input$phen0)	
 		})
 	})
+
+	#	----------------------------------------------
+	#	Comparison of different traits
+	#	----------------------------------------------	
+	observeEvent(input$go_alpha3,{
+		source("methods.R")
+		output$plot=renderPlot({
+			print(paste0("phen0::",input$phen0))
+			cmp_traits(v,input$phen1,input$phen2)	
+		})
+	})
 }
