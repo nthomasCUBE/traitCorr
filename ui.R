@@ -35,7 +35,8 @@ body, label, input, button, select {
 		),
 		mainPanel(
 			useShinyjs(),
-			plotOutput(outputId = "plot")
+			plotOutput(outputId = "plot"),
+			plotOutput(outputId = "plot2")
 		)
 	)
 )
