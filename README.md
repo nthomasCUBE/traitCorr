@@ -1,6 +1,10 @@
-# traitCorr
+# traitCorr (v0.1)
 
-##
+## Screenshots of the tool
+
+correlation of transcriptome data with trait information
+
+![traitCorr](https://github.com/nthomasCUBE/traitCorr/blob/master/pix/Figure1.png)
 
 ## Installation
 
@@ -19,9 +23,3 @@ library(shinyjs)
 library(shinythemes)
 library(xlsx)
 ```
-
-## Screenshots of the tool
-
-correlation of transcriptome data with trait information
-
-![traitCorr](https://github.com/nthomasCUBE/traitCorr/blob/master/pix/Figure1.png)
