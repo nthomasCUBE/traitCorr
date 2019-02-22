@@ -12,6 +12,7 @@ devtools::install_github('davidgohel/ReporteRsjars')
 devtools::install_github('davidgohel/ReporteRs')
 ```
 
+## Screenshots of the tool
 
 correlation of transcriptome data with trait information
 
