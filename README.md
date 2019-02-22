@@ -28,3 +28,11 @@ library(shinyjs)
 library(shinythemes)
 library(xlsx)
 ```
+
+```
+sourc("methods.R")
+source("ui.R")
+source("server.R")
+shinyApp(ui,server)
+```
+
