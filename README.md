@@ -29,6 +29,8 @@ library(shinythemes)
 library(xlsx)
 ```
 
+This is how to run it:
+
 ```
 sourc("methods.R")
 source("ui.R")
