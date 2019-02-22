@@ -4,12 +4,20 @@
 
 ## Installation
 
-For the installation of ReporteRs which allows to generate DOCX files, it is necessary
-to add following code snipped as descried in [davidgohel/ReporteRs](https://github.com/davidgohel/ReporteRs)
-which is needed to generate a Report.
+Following packages are needed, the Rscript "ReporteRs" has been replaced by R package "officer",
+as suggestd by [davidgohel/ReporteRs](https://github.com/davidgohel/ReporteRs).
 ```
-devtools::install_github('davidgohel/ReporteRsjars')
-devtools::install_github('davidgohel/ReporteRs')
+library(d3heatmap)
+library(gplots)
+library(officer)
+library(VennDiagram)
+library(scales)
+library(shiny)
+library(shinyalert)
+library(shinyBS)
+library(shinyjs)
+library(shinythemes)
+library(xlsx)
 ```
 
 ## Screenshots of the tool
