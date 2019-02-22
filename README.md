@@ -1,5 +1,10 @@
 # traitCorr (v0.1)
 
+## TraitCorr - correlating gene expression with phenotypic data
+
+The user interface TraitCorr allows to determine those genes that significantly correlate with a selected trait or among traits and provides various visualisation and analysis possibilities.
+
+
 ## Screenshots of the tool
 
 correlation of transcriptome data with trait information
