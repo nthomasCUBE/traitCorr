@@ -1,4 +1,5 @@
 library(d3heatmap)
+library(officer)
 library(shiny)
 library(shinyalert)
 library(shinyBS)
@@ -9,7 +10,7 @@ options(stringsAsFactors=FALSE)
 
 server <- function(input, output, session)
 {
-	v <- reactiveValues(file1=NULL, file2=NULL, transcriptomics=NULL, trait=NULL)
+	v <- reactiveValues(file1=NULL, file2=NULL, transcriptomics=NULL, trait=NULL, corr_type=NULL, df_output=data.frame())
 
 	#	----------------------------------------------
 	#	Transcriptomics
@@ -49,7 +50,6 @@ server <- function(input, output, session)
 	observeEvent(input$go_alpha2,{
 		source("methods.R")
 		output$plot=renderPlot({
-			print(paste0("phen0::",input$phen0))
 			L=make_corr(v,input$phen0,output)	
 
 		})
@@ -64,4 +64,34 @@ server <- function(input, output, session)
 			cmp_traits(v,input$phen1,input$phen2,input$phen3)	
 		})
 	})
+
+	#	----------------------------------------------
+	#	Defining the correlation type
+	#	----------------------------------------------
+	observeEvent(input$corr_type,{
+		v$corr_type=input$corr_type;
+	})
+
+	output$download1 <- downloadHandler(
+	    filename = function() {
+	      paste("OTUs-traitCorr_report", ".csv", sep = "")
+	    },
+	    content = function(file) {
+	      colnames(v$df_output)=c("correlation r","adj. p-value","Gene ID","trait")
+	      write.csv2(v$df_output, file, row.names = FALSE)
+	    }
+	)
+
+	output$download2 <- downloadHandler(
+	    filename = function() {
+	      paste("traitCorr_report", ".docx", sep = "")
+	    },
+	    content = function(file) {
+
+	    my_doc=read_docx()
+	    colnames(v$df_output)=c("correlation r","adj. p-value","Gene ID","trait")
+	    body_add_table(my_doc,v$df_output, style = "table_template")
+	    print(my_doc,file)
+	    }
+	)
 }

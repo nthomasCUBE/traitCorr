@@ -1,5 +1,6 @@
 library(d3heatmap)
 library(gplots)
+library(officer)
 library(VennDiagram)
 library(scales)
 library(xlsx)
@@ -20,15 +21,22 @@ calc_cmp_transcriptomics_traits=function(v){
 	appendTab(inputId = "tabset",
 		tabPanel("Correlation", 			
 		isolate(selectInput("phen0", "Select Phenotype",choices=cn)),
+		radioButtons("corr_type", "Correlation coefficient:", c("Spearman" = "spearman","Pearson" = "pearson")),
 		isolate(actionButton("go_alpha2", "Go!"))
 	))
 	appendTab(inputId = "tabset",
-		tabPanel("Compare", 			
+		tabPanel("Compare phenotypes", 			
 		isolate(selectInput("phen1", "Phenotype-1",choices=cn)),
 		isolate(selectInput("phen2", "Phenotype-2",choices=cn)),
 		isolate(selectInput("phen3", "Phenotype-3",choices=cn)),
 		isolate(actionButton("go_alpha3", "Go!"))
 	))
+	appendTab(inputId = "tabset",
+		tabPanel("Download", 			
+		downloadButton("download1","Sign corr (calculated so far, CSV)"),
+		downloadButton("download2","Sign corr (calculated so far, DOCX)")
+	))
+
 }
 
 cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
@@ -117,24 +125,32 @@ make_corr=function(v,my_trait,output){
 	AB=B[B%in%A]
 	ix=which(v$trait[,1]%in%AB)
 	N=dim(v$transcriptomics)[1]
-	X1=c(); X2=c()
+	X1=c(); X2=c(); X3=c(); X4=c();
 	for(x in 1:N){
 		iy=which(colnames(v$trait)==my_trait)
 		T1=as.numeric(v$trait[ix,iy])
 		T2=unlist(v$transcriptomics[x,AB])
-		my_p=(cor.test(T1,T2))
+		my_p=(cor.test(T1,T2,method=v$corr_type))
 		X1=c(X1,my_p$estimate)
 		X2=c(X2,my_p$p.value)
-		print(paste0("INFO|calc_cmp_transcriptomics_traits|",str(x),"|",str(N)))
+		X3=c(X3,v$transcriptomics[x,1])
+		X4=c(X4,my_trait)
 	}
 	L=list()
+	X2=p.adjust(X2,method="bonferroni")
 	L[[1]]=X1
-	L[[2]]=p.adjust(X2,method="bonferroni")
+	L[[2]]=X2
+	L[[3]]=X3
+	L[[4]]=X4
 	plot(L[[1]],L[[2]],log="y",xlab="correlation coefficient (r)",ylab="p.value")
-
+	new_entry=data.frame()
+	for(x in 1:length(X1)){
+		if(X2[x]<0.05){
+			new_entry=rbind(new_entry,c(X1[x],X2[x],X3[x],X4[x]))
+		}
+	}
 	df=data.frame(L[[1]],L[[2]])
 	df=df[order(df[,2]),]
-
 	my_size=df[,2]
 
 	n_all=length(my_size)
@@ -153,10 +169,13 @@ make_corr=function(v,my_trait,output){
 	output$plot2=renderPlot({
 		barplot(c(L[[1]],L[[2]],L[[3]]),col=c("green","#ff000044","#ff0000ff"),names=c("all genes","sign (p<0.05)","sign (p<0.001)"))
 	})
-	print(L)
 	plot(df[,1],df[,2],pch=20,xlim=c(-1,1),cex=my_size,xlab="correlation coefficient (r)",ylim=c(0,1),ylab="p.value",main=my_trait)
 	abline(h=0.05,lty=3)
 	abline(h=0.001,lty=2)
+
+
+	v$df_output=new_entry
+
 	return(L)
 }
 
