@@ -32,7 +32,7 @@ library(xlsx)
 This is how to run it:
 
 ```
-sourc("methods.R")
+source("methods.R")
 source("ui.R")
 source("server.R")
 shinyApp(ui,server)
