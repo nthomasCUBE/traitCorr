@@ -72,6 +72,24 @@ server <- function(input, output, session)
 		v$corr_type=input$corr_type;
 	})
 
+	#	----------------------------------------------
+	#	Multiple test correction
+	#	----------------------------------------------
+	observeEvent(input$multiple_test_correction,{
+		v$multiple_test_correction=input$multiple_test_correction
+	})
+
+	#	----------------------------------------------
+	#	Multiple test correction
+	#	----------------------------------------------
+	observeEvent(input$multiple_test_correction2,{
+		v$multiple_test_correction2=input$multiple_test_correction2
+	})
+	
+	observeEvent(input$significance_level,{
+		v$significance_level=input$significance_level
+	})
+
 	output$download1 <- downloadHandler(
 	    filename = function() {
 	      paste("OTUs-traitCorr_report", ".csv", sep = "")

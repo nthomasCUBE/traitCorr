@@ -19,9 +19,10 @@ calc_cmp_transcriptomics_traits=function(v){
 	print(c("INFO|transcriptomics VS traits"))
 	cn=c("---",colnames(v$trait))
 	appendTab(inputId = "tabset",
-		tabPanel("Correlation", 			
+		tabPanel("Correlation with a trait", 			
 		isolate(selectInput("phen0", "Select Phenotype",choices=cn)),
 		radioButtons("corr_type", "Correlation coefficient:", c("Spearman" = "spearman","Pearson" = "pearson")),
+		radioButtons("multiple_test_correction", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni")),
 		isolate(actionButton("go_alpha2", "Go!"))
 	))
 	appendTab(inputId = "tabset",
@@ -29,6 +30,9 @@ calc_cmp_transcriptomics_traits=function(v){
 		isolate(selectInput("phen1", "Phenotype-1",choices=cn)),
 		isolate(selectInput("phen2", "Phenotype-2",choices=cn)),
 		isolate(selectInput("phen3", "Phenotype-3",choices=cn)),
+		radioButtons("corr_type2", "Correlation coefficient:", c("Spearman" = "spearman","Pearson" = "pearson")),
+		radioButtons("multiple_test_correction2", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni")),
+		radioButtons("significance_level", "Significance level:", c("0.001"=0.001,"0.05" = 0.05)),
 		isolate(actionButton("go_alpha3", "Go!"))
 	))
 	appendTab(inputId = "tabset",
@@ -40,10 +44,14 @@ calc_cmp_transcriptomics_traits=function(v){
 }
 
 cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
-	print("INFO|cmp_traits")
+	print("INFO|cmp_traits|start")
 
 	shinyjs::show("plot")
 	shinyjs::hide("plot2")
+
+	mt_cor=v$multiple_test_correction2
+	cor_type=v$corr_type2
+	sign_level=as.double(v$significance_level)
 
 	A=(colnames(v$transcriptomics))
 	B=v$trait[,1]
@@ -51,43 +59,69 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 	ix=which(v$trait[,1]%in%AB)
 	N=dim(v$transcriptomics)[1]
 	SET_A=c(); SET_B=c(); SET_C=c()
+
+	raw_p_val1=c()
+	raw_p_val2=c()
+	raw_p_val3=c()
+
 	for(x in 1:N){
+		print(paste0("INFO|cmp_traits|start",x,"|",N))
+		print(sign_level)
 		if(my_trait1!="---"){
 			iy=which(colnames(v$trait)==my_trait1)
 			T1=as.numeric(v$trait[ix,iy])
 			T2=as.numeric(unlist(v$transcriptomics[x,AB]))
-			my_p=(cor.test(T1,T2))
-			if(my_p$p.value<0.05){
-				SET_A=c(SET_A,v$transcriptomics[x,1])
-			}
+			my_p=(cor.test(T1,T2,method=cor_type))
+			SET_A=c(SET_A,v$transcriptomics[x,1])
+			raw_p_val1=c(raw_p_val1,my_p$p.value)
 		}
 		if(my_trait2!="---"){
 			iy=which(colnames(v$trait)==my_trait2)
 			T1=as.numeric(v$trait[ix,iy])
 			T2=as.numeric(unlist(v$transcriptomics[x,AB]))
-			my_p=(cor.test(T1,T2))
-			if(my_p$p.value<0.05){
-				SET_B=c(SET_B,v$transcriptomics[x,1])
-			}
+			my_p=(cor.test(T1,T2,method=cor_type))
+			SET_B=c(SET_B,v$transcriptomics[x,1])
+			raw_p_val2=c(raw_p_val2,my_p$p.value)
 		}
 		if(my_trait3!="---"){
 			iy=which(colnames(v$trait)==my_trait3)
 			T1=as.numeric(v$trait[ix,iy])
 			T2=as.numeric(unlist(v$transcriptomics[x,AB]))
-			my_p=(cor.test(T1,T2))
-			if(my_p$p.value<0.05){
-				SET_C=c(SET_C,v$transcriptomics[x,1])
-			}
+			my_p=(cor.test(T1,T2,method=cor_type))
+			SET_C=c(SET_C,v$transcriptomics[x,1])
+			raw_p_val3=c(raw_p_val3,my_p$p.value)
 		}
 
 	}
+	print(summary(raw_p_val1))
+	print(summary(raw_p_val2))
+	print(summary(raw_p_val3))
+	
+	raw_p_val1=p.adjust(raw_p_val1,mt_cor)
+	SET_A=SET_A[raw_p_val1<=sign_level]
+	raw_p_val2=p.adjust(raw_p_val2,mt_cor)
+	SET_B=SET_B[raw_p_val2<=sign_level]
+	raw_p_val3=p.adjust(raw_p_val3,mt_cor)
+	SET_C=SET_C[raw_p_val3<=sign_level]
+	
+	print(SET_A)
+	print(SET_B)
+	print(SET_C)
+	
+	print(paste0("SET_A","|",length(SET_A)))
+	print(paste0("SET_B","|",length(SET_B)))
+	print(paste0("SET_C","|",length(SET_C)))
+	
 	area1=SET_A[!(SET_A%in%SET_B)]
 	area2=SET_B[!(SET_B%in%SET_A)]
 	cross=SET_A[SET_A%in%SET_B]
 	area1=length(area1)
 	area2=length(area2)
 	cross=length(cross)
-	if(length(SET_C)>0){
+	
+	if((length(SET_A)+length(SET_B)+length(SET_C))==0){
+		shinyalert("INFO", "No genes remained using the current filters!", type = "info")
+	}else if(length(SET_C)>0){
 		n12=SET_A[SET_A%in%SET_B]; n12=length(n12)
 		n23=SET_B[SET_B%in%SET_C]; n23=length(n23)
 		n13=SET_A[SET_A%in%SET_C]; n13=length(n13)
@@ -137,7 +171,7 @@ make_corr=function(v,my_trait,output){
 		X4=c(X4,my_trait)
 	}
 	L=list()
-	X2=p.adjust(X2,method="bonferroni")
+	X2=p.adjust(X2,method=v$multiple_test_correction)
 	L[[1]]=X1
 	L[[2]]=X2
 	L[[3]]=X3
@@ -172,7 +206,6 @@ make_corr=function(v,my_trait,output){
 	plot(df[,1],df[,2],pch=20,xlim=c(-1,1),cex=my_size,xlab="correlation coefficient (r)",ylim=c(0,1),ylab="p.value",main=my_trait)
 	abline(h=0.05,lty=3)
 	abline(h=0.001,lty=2)
-
 
 	v$df_output=new_entry
 
