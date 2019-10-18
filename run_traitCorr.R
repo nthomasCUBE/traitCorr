@@ -1,0 +1,17 @@
+library(d3heatmap)
+library(gplots)
+library(officer)
+library(VennDiagram)
+library(scales)
+library(shiny)
+library(shinyalert)
+library(shinyBS)
+library(shinyjs)
+library(shinythemes)
+library(xlsx)
+
+source("methods.R")
+source("ui.R")
+source("server.R")
+
+shinyApp(ui,server)
