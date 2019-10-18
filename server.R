@@ -66,6 +66,21 @@ server <- function(input, output, session)
 	})
 
 	#	----------------------------------------------
+	#	Regression analysis
+	#	----------------------------------------------	
+	observeEvent(input$go_alpha4,{
+		source("methods.R")
+		output$plot=renderPlot({
+			print("not implemented yet...")
+			print(summary(v$transcriptomics))
+		})
+	})
+
+
+
+
+
+	#	----------------------------------------------
 	#	Defining the correlation type
 	#	----------------------------------------------
 	observeEvent(input$corr_type,{

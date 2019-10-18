@@ -36,6 +36,10 @@ calc_cmp_transcriptomics_traits=function(v){
 		isolate(actionButton("go_alpha3", "Go!"))
 	))
 	appendTab(inputId = "tabset",
+		tabPanel("Regression analysis", 			
+		isolate(actionButton("go_alpha4", "Go!"))		
+	))
+	appendTab(inputId = "tabset",
 		tabPanel("Download", 			
 		downloadButton("download1","Sign corr (calculated so far, CSV)"),
 		downloadButton("download2","Sign corr (calculated so far, DOCX)")
