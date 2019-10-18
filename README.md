@@ -1,4 +1,4 @@
-# traitCorr (v0.1)
+# traitCorr (v0.1b)
 
 ## TraitCorr - correlating gene expression with phenotypic data
 
@@ -41,7 +41,7 @@ shinyApp(ui,server)
 To simplify the process of running traitcorr we added the method run_traitcorr that includes all dependencies.
 
 ```
-run_traitcorrr
+run_traitcorr()
 ```
 
 
