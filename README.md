@@ -38,3 +38,11 @@ source("server.R")
 shinyApp(ui,server)
 ```
 
+To simplify the process of running traitcorr we added the method run_traitcorr that includes all dependencies.
+
+```
+run_traitcorrr
+```
+
+
+
