@@ -6,7 +6,7 @@ for(x in 1:length(packages_necessary)){
 
 scripts_necessary=c("methods.R","ui.R","server.R")
 for(x in 1:length(scripts_necessary)){
-  print(scripts_necessary[x]))
+  print(scripts_necessary[x])
   source(scripts_necessary[x])
 }
 
