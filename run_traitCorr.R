@@ -1,6 +1,6 @@
 #
 # the following script is loading all libraries that are necessary
-# to run traitCorr and finally open the R Shiny instnace of traitCorr
+# to run traitCorr and finally open the R Shiny instance of traitCorr
 #
 
 packages_necessary=c("d3heatmap","gplots","officer","VennDiagram","scales","shiny","shinyalert","shinyBS","shinyjs","shinythemes","xlsx")
