@@ -156,19 +156,29 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 
 regr_analysis=function(v, my_trait1, my_gene1){
 	print("INFO|regr_analysis")
-	
 	ix=which(my_gene1==v$transcriptomics[,1])
-	D1=(v$transcriptomics[ix,])
-	D2=v$trait[,my_trait1]
-	C1=colnames(D1)
-	C2=v$trait[,1]
-	C12=C1[C1%in%C2]
-	C12_ix=which(C12%in%C2)
-	D1=D1[,C12]
-	D2=D2[C12_ix]
-	D1=(unlist(D1))
-	plot(D1,D2)
-	abline(lm(D2~D1),col="red")
+
+	data1=v$transcriptomics
+	data2=v$trait
+	
+	A=colnames(data1)
+	B=data2[,1]
+	AB=A[A%in%B]
+	print(length(AB))
+
+	ix=which(data1[,1]==my_gene1)
+	U1=(as.numeric(data1[ix,AB]))
+
+	rownames(data2)=data2[,1]
+	U2=(data2[AB,my_trait1])
+
+	ct=cor.test(U1,U2,method="spearman")
+	
+	plot(U1,U2,xlab=my_gene1,ylab=my_trait1)
+	abline(lm(U2~U1))
+	legend("bottom",paste0("pvalue=",ct$p.value))
+	legend("top",paste0("r=",ct$estimate))
+
 }
 
 make_corr=function(v,my_trait,output){
