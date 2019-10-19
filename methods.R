@@ -18,6 +18,7 @@ add_trait_information=function(){
 calc_cmp_transcriptomics_traits=function(v){
 	print(c("INFO|transcriptomics VS traits"))
 	cn=c("---",colnames(v$trait))
+	cn2=c("---",v$transcriptomics[,1])
 	appendTab(inputId = "tabset",
 		tabPanel("Correlation with a trait", 			
 		isolate(selectInput("phen0", "Select Phenotype",choices=cn)),
@@ -37,6 +38,8 @@ calc_cmp_transcriptomics_traits=function(v){
 	))
 	appendTab(inputId = "tabset",
 		tabPanel("Regression analysis", 			
+		isolate(selectInput("phen4", "Phenotype-1",choices=cn)),
+		isolate(selectInput("gene1", "Gene-1",choices=cn2)),
 		isolate(actionButton("go_alpha4", "Go!"))		
 	))
 	appendTab(inputId = "tabset",
@@ -149,6 +152,23 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 						ext.line.lwd    = 2,
 					ext.line.lty    = "dashed")
 	}
+}
+
+regr_analysis=function(v, my_trait1, my_gene1){
+	print("INFO|regr_analysis")
+	
+	ix=which(my_gene1==v$transcriptomics[,1])
+	D1=(v$transcriptomics[ix,])
+	D2=v$trait[,my_trait1]
+	C1=colnames(D1)
+	C2=v$trait[,1]
+	C12=C1[C1%in%C2]
+	C12_ix=which(C12%in%C2)
+	D1=D1[,C12]
+	D2=D2[C12_ix]
+	D1=(unlist(D1))
+	plot(D1,D2)
+	abline(lm(D2~D1),col="red")
 }
 
 make_corr=function(v,my_trait,output){

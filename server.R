@@ -73,12 +73,9 @@ server <- function(input, output, session)
 		output$plot=renderPlot({
 			print("not implemented yet...")
 			print(summary(v$transcriptomics))
+			regr_analysis(v,input$phen4,input$gene1)
 		})
 	})
-
-
-
-
 
 	#	----------------------------------------------
 	#	Defining the correlation type
