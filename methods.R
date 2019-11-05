@@ -217,6 +217,24 @@ make_corr=function(v,my_trait,output){
 			new_entry=rbind(new_entry,c(X1[x],X2[x],X3[x],X4[x]))
 		}
 	}
+
+	df_all=data.frame(L[[1]],L[[2]],L[[3]],L[[4]])
+	df_all=subset(df_all,df_all[,2]<0.001)
+	gene_selected=(df_all[,3])
+	u_m=unique(v$module[,2])
+	m_arr=c()
+	for(x in 1:length(u_m)){
+		g_a=subset(v$module,v$module[,2]==u_m[x])[,1]
+		g_s=g_a[gene_selected%in%g_a]
+		m_r=100*length(g_s)/length(g_a)
+		m_arr=c(m_arr,m_r)
+	}
+	
+	output$plot3=renderPlot({
+		barplot(m_arr,names=u_m)
+	})
+	
+
 	df=data.frame(L[[1]],L[[2]])
 	df=df[order(df[,2]),]
 	my_size=df[,2]
@@ -224,7 +242,7 @@ make_corr=function(v,my_trait,output){
 	n_all=length(my_size)
 	n_5p_sign=length(my_size[my_size<0.05])
 	n_1pm_sign=length(my_size[my_size<0.001])
-
+	
 	my_size=rep(1,length(df[,2]))
 	my_size[df[,2]<0.05]=2
 	my_size[df[,2]<0.001]=4

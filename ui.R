@@ -29,6 +29,7 @@ body, label, input, button, select {
 		tabPanel("TraitCorr - finding significantly correlating traits",
 			fileInput("file1", "Transcriptome (expression data)", multiple = TRUE, accept = c("text/text", ".txt")),
 			fileInput("file2", "Trait information", multiple = TRUE, accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
+			fileInput("file3", "Gene-Module-Assignment", multiple = TRUE, accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
 			actionButton("goButton", "Analyse dataset!")
 		)
 		)
@@ -36,7 +37,8 @@ body, label, input, button, select {
 		mainPanel(
 			useShinyjs(),
 			plotOutput(outputId = "plot"),
-			plotOutput(outputId = "plot2")
+			plotOutput(outputId = "plot2"),
+			plotOutput(outputId = "plot3")
 		)
 	)
 )

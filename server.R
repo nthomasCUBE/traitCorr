@@ -10,7 +10,7 @@ options(stringsAsFactors=FALSE)
 
 server <- function(input, output, session)
 {
-	v <- reactiveValues(file1=NULL, file2=NULL, transcriptomics=NULL, trait=NULL, corr_type=NULL, df_output=data.frame())
+	v <- reactiveValues(file1=NULL, file2=NULL, file3=NULL, transcriptomics=NULL, trait=NULL, module=NULL, corr_type=NULL, df_output=data.frame())
 
 	#	----------------------------------------------
 	#	Transcriptomics
@@ -33,6 +33,26 @@ server <- function(input, output, session)
 		v$trait=read.csv(input$file2$datapath,sep="\t",header=T,check.names=FALSE)
 		shinyalert("INFO", paste(dim(v$trait)[1],"entries loaded for the trait information was uploaded!"), type = "info")
 	})
+
+	#	----------------------------------------------
+	#	Gene-Module-Assignment information
+	#	----------------------------------------------
+	observeEvent(input$file3,{
+		source("methods.R")
+		v$file3=input$file3
+		
+		v$module=read.csv(input$file3$datapath,sep="\t",header=T,check.names=FALSE)
+
+		my_mod=unique(v$module[,2])
+		for(i in 1:length(my_mod)){
+			nmb_genes=subset(v$module,v$module[,2]==my_mod[i])
+			nmb_genes=dim(nmb_genes)[1]
+			print(paste(my_mod[i],nmb_genes))
+		}
+
+		shinyalert("INFO", paste(dim(v$trait)[1],"gene-module assignments were uploaded!"), type = "info")
+	})
+
 	
 	#	----------------------------------------------
 	#	Calculation of transcriptomics and traits
@@ -75,6 +95,11 @@ server <- function(input, output, session)
 			print(summary(v$transcriptomics))
 			regr_analysis(v,input$phen4,input$gene1)
 		})
+		output$plot2=renderPlot({
+		})
+		output$plot3=renderPlot({
+		})
+		
 	})
 
 	#	----------------------------------------------

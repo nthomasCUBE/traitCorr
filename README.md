@@ -11,11 +11,6 @@ correlation of transcriptome data with trait information
 
 ![traitCorr](https://github.com/nthomasCUBE/traitCorr/blob/master/pix/Figure1_V2.png)
 
-traitCorr can also be used to correlate specific traits against specific genes when depicting the correlations
-as dotplot using simple regression analaysis.
-
-![traitCorr](https://github.com/nthomasCUBE/traitCorr/blob/master/pix/Figure2_V1.png)
-
 ## Installation
 
 Following packages are needed, the Rscript "ReporteRs" has been replaced by R package "officer",
