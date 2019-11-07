@@ -223,15 +223,43 @@ make_corr=function(v,my_trait,output){
 	gene_selected=(df_all[,3])
 	u_m=unique(v$module[,2])
 	m_arr=c()
+	m_arr_1=c()
+	m_arr_2=c()
 	for(x in 1:length(u_m)){
 		g_a=subset(v$module,v$module[,2]==u_m[x])[,1]
-		g_s=g_a[gene_selected%in%g_a]
+		g_s=g_a[g_a%in%gene_selected]
 		m_r=100*length(g_s)/length(g_a)
 		m_arr=c(m_arr,m_r)
+		m_arr_1=c(m_arr_1,length(g_s))
+		m_arr_2=c(m_arr_2,length(g_a))
 	}
 	
+	
 	output$plot3=renderPlot({
-		barplot(m_arr,names=u_m)
+		#barplot(m_arr,names=u_m)
+		
+		A=m_arr_1
+		B=m_arr_2
+		
+		m3=c()
+		for(x in 1:length(A)){
+			x1=A[x]
+			x2=sum(A)-x1
+			x3=B[x]
+			x4=sum(B)-x3
+			print(c(x1,x2,x3,x4))
+			m3=c(m3,(phyper(A[x],B[x],sum(B),sum(A),lower.tail=FALSE)))
+		}
+		m3=-log2(m3)
+		m3[m3>10]=10
+		print(m3)
+		
+		print(m3)
+		plot(m_arr_1,m_arr_2,cex=m3,pch=20)
+		text(m_arr_1,m_arr_2,u_m,cex=2.5)
+		
+		print(m_arr_1)
+		print(m_arr_2)
 	})
 	
 
