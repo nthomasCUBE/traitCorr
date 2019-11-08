@@ -107,7 +107,9 @@ server <- function(input, output, session)
 	observeEvent(input$go_alpha5,{
 		source("methods.R")
 		output$plot=renderPlot({
-			linear_model(v,input$phen5)
+			res=linear_model(v,input$phen5)
+			updateTextAreaInput(session, "phen5_area", label = "", value = res)
+
 		})
 		output$plot2=renderPlot({
 		})
