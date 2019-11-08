@@ -43,6 +43,11 @@ calc_cmp_transcriptomics_traits=function(v){
 		isolate(actionButton("go_alpha4", "Go!"))		
 	))
 	appendTab(inputId = "tabset",
+		tabPanel("Linear model", 			
+		isolate(textInput("phen5", "Linear model (e.g. expression~trait1*trait2")),
+		isolate(actionButton("go_alpha5", "Go!"))		
+	))
+	appendTab(inputId = "tabset",
 		tabPanel("Download", 			
 		downloadButton("download1","Sign corr (calculated so far, CSV)"),
 		downloadButton("download2","Sign corr (calculated so far, DOCX)")
@@ -154,6 +159,11 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 	}
 }
 
+linear_model=function(v, my_opt){
+	print("INFO|linear_model")
+	print(v$transcriptomics[1:5,1:5])
+}
+
 regr_analysis=function(v, my_trait1, my_gene1){
 	print("INFO|regr_analysis")
 	ix=which(my_gene1==v$transcriptomics[,1])
@@ -247,15 +257,13 @@ make_corr=function(v,my_trait,output){
 			x2=sum(A)-x1
 			x3=B[x]
 			x4=sum(B)-x3
-			print(c(x1,x2,x3,x4))
 			m3=c(m3,(phyper(A[x],B[x],sum(B),sum(A),lower.tail=FALSE)))
 		}
+		my_col=rep("black",length(A))
+		my_col[p.adjust(m3,"BH")<0.001]="red"
 		m3=-log2(m3)
 		m3[m3>10]=10
-		print(m3)
-		
-		print(m3)
-		plot(m_arr_1,m_arr_2,cex=m3,pch=20)
+		plot(m_arr_1,m_arr_2,cex=m3,pch=20,col=my_col)
 		text(m_arr_1,m_arr_2,u_m,cex=2.5)
 		
 		print(m_arr_1)

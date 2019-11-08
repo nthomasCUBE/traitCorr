@@ -91,9 +91,23 @@ server <- function(input, output, session)
 	observeEvent(input$go_alpha4,{
 		source("methods.R")
 		output$plot=renderPlot({
-			print("not implemented yet...")
 			print(summary(v$transcriptomics))
 			regr_analysis(v,input$phen4,input$gene1)
+		})
+		output$plot2=renderPlot({
+		})
+		output$plot3=renderPlot({
+		})
+		
+	})
+
+	#	----------------------------------------------
+	#	Linear model
+	#	----------------------------------------------	
+	observeEvent(input$go_alpha5,{
+		source("methods.R")
+		output$plot=renderPlot({
+			linear_model(v,input$phen5)
 		})
 		output$plot2=renderPlot({
 		})
