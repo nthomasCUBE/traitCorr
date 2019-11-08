@@ -45,6 +45,7 @@ calc_cmp_transcriptomics_traits=function(v){
 	appendTab(inputId = "tabset",
 		tabPanel("Linear model", 			
 		isolate(textInput("phen5", "Linear model (e.g. expression~trait1*trait2")),
+		isolate(textAreaInput("phen5_area", "Result", "Data Summary", width = "1000px")),
 		isolate(actionButton("go_alpha5", "Go!"))		
 	))
 	appendTab(inputId = "tabset",
@@ -161,7 +162,21 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 
 linear_model=function(v, my_opt){
 	print("INFO|linear_model")
-	print(v$transcriptomics[1:5,1:5])
+	expr=v$transcriptomics
+	trait=v$trait
+	rownames(trait)=trait[,1]
+	
+	L1=colnames(expr)[2:length(colnames(expr))]
+	L2=trait[,1]
+	L12=L1[L1%in%L2]
+	
+	t1=trait[L12,10]
+	t2=trait[L12,11]
+	t0=expr[1,L12]
+	t0_r=(t(t0))
+
+	df=data.frame(t0_r,t1,t2)
+	print(lm(df[,1]~df[,2]*df[,3]))
 }
 
 regr_analysis=function(v, my_trait1, my_gene1){
