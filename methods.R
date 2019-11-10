@@ -49,6 +49,7 @@ calc_cmp_transcriptomics_traits=function(v){
 		isolate(selectInput("phen7", "Phenotype-2",choices=cn)),
 		isolate(selectInput("opt2", "operator-2",choices=c("","*","+"))),
 		isolate(selectInput("phen8", "Phenotype-3",choices=cn)),
+		isolate(textAreaInput("phen5_area", "Result", "Data Summary", height = "400px")),
 		isolate(actionButton("go_alpha5", "Go!"))		
 	))
 	appendTab(inputId = "tabset",
@@ -183,10 +184,6 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2){
 	t0_r=(t(t0))
 
 	df=data.frame(t0_r,t1,t2)
-	
-	print(c("phen8==",phen8))
-	print(c("opt1==",opt1))
-	print(c("opt2==",opt2))
 	
 	if(phen8=="---"){
 		if(opt1=="*"){
