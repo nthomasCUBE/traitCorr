@@ -45,11 +45,11 @@ calc_cmp_transcriptomics_traits=function(v){
 	appendTab(inputId = "tabset",
 		tabPanel("Linear model", 			
 		isolate(selectInput("phen6", "Phenotype-1",choices=cn)),
-		isolate(selectInput("opt1", "operator-1",choices=c("","*","+"))),
+		isolate(selectInput("opt1", "operator-1",choices=c("---","*","+"))),
 		isolate(selectInput("phen7", "Phenotype-2",choices=cn)),
-		isolate(selectInput("opt2", "operator-2",choices=c("","*","+"))),
+		isolate(selectInput("opt2", "operator-2",choices=c("---","*","+"))),
 		isolate(selectInput("phen8", "Phenotype-3",choices=cn)),
-		isolate(textAreaInput("phen5_area", "Result", "Data Summary", height = "400px")),
+		isolate(textAreaInput("phen5_area", "Result", "", height = "400px")),
 		isolate(actionButton("go_alpha5", "Go!"))		
 	))
 	appendTab(inputId = "tabset",
@@ -173,17 +173,41 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2){
 	L1=colnames(expr)[2:length(colnames(expr))]
 	L2=trait[,1]
 	L12=L1[L1%in%L2]
-	
+		
 	ix1=which(colnames(trait)==phen6)
 	ix2=which(colnames(trait)==phen7)
 	ix3=which(colnames(trait)==phen8)
 
+	print(c("phen6=",phen6))
+	print(c("phen7=",phen7))
+	print(c("phen8=",phen8))
+	print(c("ix1=",ix1))
+	print(c("ix2=",ix2))
+	print(c("ix3=",ix3))
+
 	t1=trait[L12,ix1]
 	t2=trait[L12,ix2]
+	t3=trait[L12,ix3]
 	t0=expr[1,L12]
 	t0_r=(t(t0))
+	
+	print(length(t1))
+	print(length(t2))
+	print(length(t3))
 
-	df=data.frame(t0_r,t1,t2)
+	df=data.frame(t0_r,t1,t2,t3)
+	print(dim(df))
+	print(head(df))
+	
+	if(dim(df)[2]>3){
+		colnames(df)=c("expression",phen6,phen7,phen8)
+	}else if(dim(df)[2]>2){
+		colnames(df)=c("expression",phen6,phen7)
+	}else{
+		colnames(df)=c("expression",phen6)
+	}
+	
+	print(summary(df))
 	
 	if(phen8=="---"){
 		if(opt1=="*"){
