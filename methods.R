@@ -143,6 +143,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		n23=SET_B[SET_B%in%SET_C]; n23=length(n23)
 		n13=SET_A[SET_A%in%SET_C]; n13=length(n13)
 		n123=SET_A[SET_A%in%SET_B & SET_A%in%SET_C]; n123=length(n123)
+		par(oma=c(0,20,0,20))
 		draw.triple.venn(area1=length(SET_A),area2=length(SET_B),area3=length(SET_C),n12,n23,n13,n123,
 		 category        = c(my_trait1,my_trait2,my_trait3),
 						fill            = c("blue","yellow","red"),
@@ -152,6 +153,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 						cat.dist        = -.5,
 		)
 	}else{
+		par(oma=c(0,20,0,20))
 		draw.pairwise.venn(area1 = area1, area2=area2,cross.area=cross,
 		 category        = c(my_trait1,my_trait2),
 						fill            = c("blue","red"),
@@ -271,10 +273,11 @@ regr_analysis=function(v, my_trait1, my_gene1){
 
 	ct=cor.test(U1,U2,method="spearman")
 	
-	plot(U1,U2,xlab=my_gene1,ylab=my_trait1)
+	par(oma=c(0,20,0,20))
+	plot(U1,U2,xlab=my_gene1,ylab=my_trait1,pch=20,cex=3,main=my_gene1)
 	abline(lm(U2~U1))
-	legend("bottom",paste0("pvalue=",ct$p.value))
-	legend("top",paste0("r=",ct$estimate))
+	legend("bottom",paste0("p-value=",round(ct$p.value,3)))
+	legend("top",paste0("r=",round(ct$estimate,3)))
 
 }
 
@@ -350,6 +353,7 @@ make_corr=function(v,my_trait,output){
 		my_col[p.adjust(m3,"BH")<0.001]="red"
 		m3=-log2(m3)
 		m3[m3>10]=10
+		par(oma=c(0,20,0,20))
 		plot(m_arr_1,m_arr_2,cex=m3,pch=20,col=my_col)
 		text(m_arr_1,m_arr_2,u_m,cex=2.5)
 		
@@ -376,6 +380,7 @@ make_corr=function(v,my_trait,output){
 	L[[3]]=n_1pm_sign
 			
 	output$plot2=renderPlot({
+		par(oma=c(0,20,0,20))
 		barplot(c(L[[1]],L[[2]],L[[3]]),col=c("green","#ff000044","#ff0000ff"),names=c("all genes","sign (p<0.05)","sign (p<0.001)"))
 	})
 	plot(df[,1],df[,2],pch=20,xlim=c(-1,1),cex=my_size,xlab="correlation coefficient (r)",ylim=c(0,1),ylab="p.value",main=my_trait)

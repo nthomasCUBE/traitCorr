@@ -60,6 +60,7 @@ server <- function(input, output, session)
 	observeEvent(input$goButton,{
 		source("methods.R")
 		output$plot=renderPlot({
+			par(oma=c(0,20,0,20))
 			calc_cmp_transcriptomics_traits(v)
 		})
 		output$plot2=renderPlot({
@@ -74,6 +75,7 @@ server <- function(input, output, session)
 	observeEvent(input$go_alpha2,{
 		source("methods.R")
 		output$plot=renderPlot({
+			par(oma=c(0,20,0,20))
 			L=make_corr(v,input$phen0,output)	
 		})
 		output$plot2=renderPlot({
