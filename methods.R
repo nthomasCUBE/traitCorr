@@ -147,7 +147,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		 category        = c(my_trait1,my_trait2,my_trait3),
 						fill            = c("blue","yellow","red"),
 						lty             = "blank",
-						cex             = 1,
+						cex             = 2,
 						cat.cex         = 2,
 						cat.dist        = -.5,
 		)
@@ -156,7 +156,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		 category        = c(my_trait1,my_trait2),
 						fill            = c("blue","red"),
 						lty             = "blank",
-						cex             = 1,
+						cex             = 2,
 						cat.cex         = 2,
 						cat.dist        = -.5,
 						ext.line.lwd    = 2,

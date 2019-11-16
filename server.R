@@ -62,6 +62,10 @@ server <- function(input, output, session)
 		output$plot=renderPlot({
 			calc_cmp_transcriptomics_traits(v)
 		})
+		output$plot2=renderPlot({
+		})
+		output$plot3=renderPlot({
+		})
 	})
 	
 	#	----------------------------------------------
@@ -71,7 +75,10 @@ server <- function(input, output, session)
 		source("methods.R")
 		output$plot=renderPlot({
 			L=make_corr(v,input$phen0,output)	
-
+		})
+		output$plot2=renderPlot({
+		})
+		output$plot3=renderPlot({
 		})
 	})
 
@@ -82,6 +89,10 @@ server <- function(input, output, session)
 		source("methods.R")
 		output$plot=renderPlot({
 			cmp_traits(v,input$phen1,input$phen2,input$phen3)	
+		})
+		output$plot2=renderPlot({
+		})
+		output$plot3=renderPlot({
 		})
 	})
 
@@ -98,7 +109,6 @@ server <- function(input, output, session)
 		})
 		output$plot3=renderPlot({
 		})
-		
 	})
 
 	#	----------------------------------------------
@@ -115,7 +125,6 @@ server <- function(input, output, session)
 		})
 		output$plot3=renderPlot({
 		})
-		
 	})
 
 	#	----------------------------------------------
