@@ -148,9 +148,9 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		 category        = c(my_trait1,my_trait2,my_trait3),
 						fill            = c("blue","yellow","red"),
 						lty             = "blank",
-						cex             = 2,
-						cat.cex         = 2,
-						cat.dist        = -.5,
+						cex             = 1.5,
+						cat.cex         = 1.5,
+						cat.dist        = 0,
 		)
 	}else{
 		par(oma=c(0,20,0,20))
@@ -158,9 +158,9 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		 category        = c(my_trait1,my_trait2),
 						fill            = c("blue","red"),
 						lty             = "blank",
-						cex             = 2,
-						cat.cex         = 2,
-						cat.dist        = -.5,
+						cex             = 1.5,
+						cat.cex         = 1.5,
+						cat.dist        = 0,
 						ext.line.lwd    = 2,
 					ext.line.lty    = "dashed")
 	}
@@ -354,7 +354,7 @@ make_corr=function(v,my_trait,output){
 		m3=-log2(m3)
 		m3[m3>10]=10
 		par(oma=c(0,20,0,20))
-		plot(m_arr_1,m_arr_2,cex=m3,pch=20,col=my_col)
+		plot(m_arr_1,m_arr_2,cex=m3,pch=20,col=my_col,xlab="Amount of trait-correlated genes in module",ylab="Amount of genes in module",cex.lab=1.5)
 		text(m_arr_1,m_arr_2,u_m,cex=2.5)
 		
 		print(m_arr_1)
@@ -381,7 +381,7 @@ make_corr=function(v,my_trait,output){
 			
 	output$plot2=renderPlot({
 		par(oma=c(0,20,0,20))
-		barplot(c(L[[1]],L[[2]],L[[3]]),col=c("green","#ff000044","#ff0000ff"),names=c("all genes","sign (p<0.05)","sign (p<0.001)"))
+		barplot(c(L[[1]],L[[2]],L[[3]]),col=c("green","#ff000044","#ff0000ff"),names=c("all genes","sign (p<0.05)","sign (p<0.001)"),ylab="Amount of genes (#)",cex.lab=1.5,cex.names=2)
 	})
 	plot(df[,1],df[,2],pch=20,xlim=c(-1,1),cex=my_size,xlab="correlation coefficient (r)",ylim=c(0,1),ylab="p.value",main=my_trait)
 	abline(h=0.05,lty=3)

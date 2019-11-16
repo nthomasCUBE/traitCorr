@@ -76,7 +76,7 @@ server <- function(input, output, session)
 		source("methods.R")
 		output$plot=renderPlot({
 			par(oma=c(0,20,0,20))
-			L=make_corr(v,input$phen0,output)	
+			L=make_corr(v,input$phen0,output,main.cex=1.5,cex.names=2)	
 		})
 		output$plot2=renderPlot({
 		})
