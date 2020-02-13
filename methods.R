@@ -84,7 +84,6 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 
 	for(x in 1:N){
 		print(paste0("INFO|cmp_traits|start",x,"|",N))
-		print(sign_level)
 		if(my_trait1!="---"){
 			iy=which(colnames(v$trait)==my_trait1)
 			T1=as.numeric(v$trait[ix,iy])
@@ -111,24 +110,12 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		}
 
 	}
-	print(summary(raw_p_val1))
-	print(summary(raw_p_val2))
-	print(summary(raw_p_val3))
-	
 	raw_p_val1=p.adjust(raw_p_val1,mt_cor)
 	SET_A=SET_A[raw_p_val1<=sign_level]
 	raw_p_val2=p.adjust(raw_p_val2,mt_cor)
 	SET_B=SET_B[raw_p_val2<=sign_level]
 	raw_p_val3=p.adjust(raw_p_val3,mt_cor)
 	SET_C=SET_C[raw_p_val3<=sign_level]
-	
-	print(SET_A)
-	print(SET_B)
-	print(SET_C)
-	
-	print(paste0("SET_A","|",length(SET_A)))
-	print(paste0("SET_B","|",length(SET_B)))
-	print(paste0("SET_C","|",length(SET_C)))
 	
 	area1=SET_A[!(SET_A%in%SET_B)]
 	area2=SET_B[!(SET_B%in%SET_A)]
@@ -155,9 +142,6 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		)
 	}else{
 		par(oma=c(5,5,5,5))
-		print(area1)
-		print(area2)
-		print(cross)
 		draw.pairwise.venn(area1 = area1+cross, area2=area2+cross,cross.area=cross,
 		 category        = c(my_trait1,my_trait2),
 						fill            = c("blue","red"),
@@ -172,11 +156,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 
 linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
 
-	print(gene2)
-	print("INFO|linear_model")
 	expr=v$transcriptomics
-	print(dim(expr))
-	print("transcr_expr")
 	trait=v$trait
 	rownames(trait)=trait[,1]
 	
@@ -188,27 +168,14 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
 	ix2=which(colnames(trait)==phen7)
 	ix3=which(colnames(trait)==phen8)
 
-	print(c("phen6=",phen6))
-	print(c("phen7=",phen7))
-	print(c("phen8=",phen8))
-	print(c("ix1=",ix1))
-	print(c("ix2=",ix2))
-	print(c("ix3=",ix3))
-
 	t1=trait[L12,ix1]
 	t2=trait[L12,ix2]
 	t3=trait[L12,ix3]
 
-	t0=expr[which(gene2%in%cn2),L12]
+	t0=expr[which(gene2%in%expr[,1]),L12]
 	t0_r=(t(t0))
 	
-	print(length(t1))
-	print(length(t2))
-	print(length(t3))
-
 	df=data.frame(t0_r,t1,t2,t3)
-	print(dim(df))
-	print(head(df))
 	
 	if(dim(df)[2]>3){
 		colnames(df)=c("expression",phen6,phen7,phen8)
@@ -218,32 +185,24 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
 		colnames(df)=c("expression",phen6)
 	}
 	
-	print(summary(df))
-	
 	if(phen8=="---"){
 		if(opt1=="*"){
-			print("11")
 			o1=summary(lm(df[,1]~df[,2]*df[,3]))["coefficients"][[1]][,4]
 		}
 		if(opt1=="+"){
-			print("12")
 			o1=summary(lm(df[,1]~df[,2]+df[,3]))["coefficients"][[1]][,4]
 		}
 	}else{
 		if(opt1=="*" && opt2=="*"){
-			print("21")
 			o1=summary(lm(df[,1]~df[,2]*df[,3]*df[,4]))["coefficients"][[1]][,4]
 		}
 		if(opt1=="*" && opt2=="+"){
-			print("22")
 			o1=summary(lm(df[,1]~df[,2]*df[,3]+df[,4]))["coefficients"][[1]][,4]
 		}
 		if(opt1=="+" && opt2=="*"){
-			print("23")
 			o1=summary(lm(df[,1]~df[,2]+df[,3]*df[,4]))["coefficients"][[1]][,4]
 		}
 		if(opt1=="+" && opt2=="+"){
-			print("24")
 			o1=summary(lm(df[,1]~df[,2]+df[,3]+df[,4]))["coefficients"][[1]][,4]
 		}
 	}
@@ -272,7 +231,6 @@ regr_analysis=function(v, my_trait1, my_gene1){
 	A=colnames(data1)
 	B=data2[,1]
 	AB=A[A%in%B]
-	print(length(AB))
 
 	ix=which(data1[,1]==my_gene1)
 	U1=(as.numeric(data1[ix,AB]))
@@ -365,9 +323,6 @@ make_corr=function(v,my_trait,output){
 		par(oma=c(0,20,0,20))
 		plot(m_arr_1,m_arr_2,cex=m3,pch=20,col=my_col,xlab="Amount of trait-correlated genes in module",ylab="Amount of genes in module",cex.lab=1.5)
 		text(m_arr_1,m_arr_2,u_m,cex=2.5)
-		
-		print(m_arr_1)
-		print(m_arr_2)
 	})
 	
 

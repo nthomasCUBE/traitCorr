@@ -104,7 +104,6 @@ server <- function(input, output, session)
 	observeEvent(input$go_alpha4,{
 		source("methods.R")
 		output$plot=renderPlot({
-			print(summary(v$transcriptomics))
 			regr_analysis(v,input$phen4,input$gene1)
 		})
 		output$plot2=renderPlot({
@@ -173,7 +172,6 @@ server <- function(input, output, session)
 	    my_doc=read_docx()
 	    colnames(v$df_output)=c("correlation r","adj. p-value","Gene ID","trait")
 	    body_add_table(my_doc,v$df_output, style = "table_template")
-	    print(my_doc,file)
 	    }
 	)
 }
