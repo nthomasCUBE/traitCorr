@@ -44,6 +44,7 @@ calc_cmp_transcriptomics_traits=function(v){
 	))
 	appendTab(inputId = "tabset",
 		tabPanel("Linear model", 			
+		isolate(selectInput("gene2", "Gene-1",choices=cn2)),
 		isolate(selectInput("phen6", "Phenotype-1",choices=cn)),
 		isolate(selectInput("opt1", "operator-1",choices=c("---","*","+"))),
 		isolate(selectInput("phen7", "Phenotype-2",choices=cn)),
@@ -143,7 +144,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 		n23=SET_B[SET_B%in%SET_C]; n23=length(n23)
 		n13=SET_A[SET_A%in%SET_C]; n13=length(n13)
 		n123=SET_A[SET_A%in%SET_B & SET_A%in%SET_C]; n123=length(n123)
-		par(oma=c(0,20,0,20))
+		par(oma=c(5,5,5,5))
 		draw.triple.venn(area1=length(SET_A),area2=length(SET_B),area3=length(SET_C),n12,n23,n13,n123,
 		 category        = c(my_trait1,my_trait2,my_trait3),
 						fill            = c("blue","yellow","red"),
@@ -153,8 +154,11 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 						cat.dist        = 0,
 		)
 	}else{
-		par(oma=c(0,20,0,20))
-		draw.pairwise.venn(area1 = area1, area2=area2,cross.area=cross,
+		par(oma=c(5,5,5,5))
+		print(area1)
+		print(area2)
+		print(cross)
+		draw.pairwise.venn(area1 = area1+cross, area2=area2+cross,cross.area=cross,
 		 category        = c(my_trait1,my_trait2),
 						fill            = c("blue","red"),
 						lty             = "blank",
@@ -166,9 +170,13 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 	}
 }
 
-linear_model=function(v, phen6, phen7, phen8, opt1, opt2){
+linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
+
+	print(gene2)
 	print("INFO|linear_model")
 	expr=v$transcriptomics
+	print(dim(expr))
+	print("transcr_expr")
 	trait=v$trait
 	rownames(trait)=trait[,1]
 	
@@ -190,7 +198,8 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2){
 	t1=trait[L12,ix1]
 	t2=trait[L12,ix2]
 	t3=trait[L12,ix3]
-	t0=expr[1,L12]
+
+	t0=expr[which(gene2%in%cn2),L12]
 	t0_r=(t(t0))
 	
 	print(length(t1))
