@@ -46,10 +46,13 @@ calc_cmp_transcriptomics_traits=function(v){
 		tabPanel("Linear model", 			
 		isolate(selectInput("gene2", "Gene-1",choices=cn2)),
 		isolate(selectInput("phen6", "Phenotype-1",choices=cn)),
+		isolate(selectInput("phen62", "Phenotype-1 (fixed or random)",choices=c("fixed model","random model"))),
 		isolate(selectInput("opt1", "operator-1",choices=c("---","*","+"))),
 		isolate(selectInput("phen7", "Phenotype-2",choices=cn)),
+		isolate(selectInput("phen72", "Phenotype-2 (fixed or random)",choices=c("fixed model","random model"))),
 		isolate(selectInput("opt2", "operator-2",choices=c("---","*","+"))),
 		isolate(selectInput("phen8", "Phenotype-3",choices=cn)),
+		isolate(selectInput("phen82", "Phenotype-3 (fixed or random)",choices=c("fixed model","random model"))),
 		isolate(textAreaInput("phen5_area", "Result", "", height = "400px")),
 		isolate(actionButton("go_alpha5", "Go!"))		
 	))
@@ -154,7 +157,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 	}
 }
 
-linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
+linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2, phen62, phen72, phen82){
 
 	expr=v$transcriptomics
 	trait=v$trait
@@ -187,28 +190,153 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2){
 	
 	if(phen8=="---"){
 		if(opt1=="*"){
-			o1=summary(lm(df[,1]~df[,2]*df[,3]))["coefficients"][[1]][,4]
+
+			if(phen62=="fixed model" && phen72=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]*df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model"){
+				o1=summary(lm(df[,1]~df[,2]*1|df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]*df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]*1|df[,3]))["coefficients"][[1]][,4]
+			}
 		}
 		if(opt1=="+"){
-			o1=summary(lm(df[,1]~df[,2]+df[,3]))["coefficients"][[1]][,4]
+
+			if(phen62=="fixed model" && phen72=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]+df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model"){
+				o1=summary(lm(df[,1]~df[,2]+1|df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]+df[,3]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]+1|df[,3]))["coefficients"][[1]][,4]
+			}
 		}
 	}else{
 		if(opt1=="*" && opt2=="*"){
-			o1=summary(lm(df[,1]~df[,2]*df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			if(phen62=="fixed model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]*df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]*df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]*1|df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]*1|df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]*df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]*df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]*1|df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]*1|df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+			}
 		}
 		if(opt1=="*" && opt2=="+"){
-			o1=summary(lm(df[,1]~df[,2]*df[,3]+df[,4]))["coefficients"][[1]][,4]
+			if(phen62=="fixed model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]*df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]*df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]*1|df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]*1|df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(1|df[,1]~df[,2]*df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(1|df[,1]~df[,2]*df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(1|df[,1]~1|df[,2]*df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(1|df[,1]~1|df[,2]*df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+			}
 		}
 		if(opt1=="+" && opt2=="*"){
-			o1=summary(lm(df[,1]~df[,2]+df[,3]*df[,4]))["coefficients"][[1]][,4]
+			if(phen62=="fixed model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]+df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]+df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]+1|df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]+1|df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]+df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]+df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]+1|df[,3]*df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]+1|df[,3]*1|df[,4]))["coefficients"][[1]][,4]
+			}
 		}
 		if(opt1=="+" && opt2=="+"){
-			o1=summary(lm(df[,1]~df[,2]+df[,3]+df[,4]))["coefficients"][[1]][,4]
+			if(phen62=="fixed model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]+df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]+df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~df[,2]+1|df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="fixed model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~df[,2]+1|df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]+df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="fixed model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]+df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="fixed model"){
+				o1=summary(lm(df[,1]~1|df[,2]+1|df[,3]+df[,4]))["coefficients"][[1]][,4]
+
+			}else if(phen62=="random model" && phen72=="random model" && phen82=="random model"){
+				o1=summary(lm(df[,1]~1|df[,2]+1|df[,3]+1|df[,4]))["coefficients"][[1]][,4]
+			}
 		}
 	}
-
-	o1=summary(lm(df[,1]~df[,2]*df[,3]))["coefficients"][[1]][,4]
-	o2=rownames(summary(lm(df[,1]~df[,2]*df[,3]))["coefficients"][[1]])
+	
+	print(summary(df))
+	o2=rownames(as.data.frame(o1))
+	print(o1)
+	print(o2)
+	print(length(o2))
+	if(length(o2)==4){
+		o2[2]=phen6
+		o2[3]=phen7
+		o2[4]=paste(phen6,phen7)
+	}
 	
 	o12=c()
 	o12=c(o12,"contrast\tp-value\n")
