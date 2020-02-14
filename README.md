@@ -1,4 +1,4 @@
-# traitCorr (v0.1b)
+# traitCorr (v0.7b)
 
 ## TraitCorr - correlating gene expression with phenotypic data
 
