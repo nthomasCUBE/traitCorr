@@ -11,6 +11,14 @@ correlation of transcriptome data with trait information
 
 ![traitCorr](https://github.com/nthomasCUBE/traitCorr/blob/master/pix/Figure1_V2.png)
 
+## Literature
+
+Please find our manuscript published in Gene Reports
+[TraitCorr-Gene-Report](https://www.sciencedirect.com/science/article/pii/S2452014420300637)
+and our preprint
+[TraitCorr-Preprint](https://www.biorxiv.org/content/10.1101/557975v1)
+
+
 ## Installation
 
 Following packages are needed, the Rscript "ReporteRs" has been replaced by R package "officer",
