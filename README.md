@@ -14,9 +14,9 @@ correlation of transcriptome data with trait information
 ## Literature
 
 Please find our manuscript published in Gene Reports
-[TraitCorr-Gene-Report](https://www.sciencedirect.com/science/article/pii/S2452014420300637)
+[TraitCorr-Gene-Report-Nussbaumer et al. 2020](https://www.sciencedirect.com/science/article/pii/S2452014420300637)
 and our preprint
-[TraitCorr-Preprint](https://www.biorxiv.org/content/10.1101/557975v1)
+[TraitCorr-Preprint-Nussbaumer et al., 2019](https://www.biorxiv.org/content/10.1101/557975v1)
 
 
 ## Installation
