@@ -48,6 +48,11 @@ shinyApp(ui,server)
 
 To simplify the process of running traitcorr we added the method run_traitcorr that includes all dependencies.
 
+Normally, I would copy the content of run_traitCorr.R into the R workbench and then
+I first see whether R packages are still needed. If so, then the R shiny GUI should be displayed.
+The input_data "traitCorr_input.zip" would have to get extracted and finally the data can be included
+and afterwards possible to analyse the demo files.
+
 ```
 run_traitcorr()
 ```
