@@ -1,10 +1,10 @@
-library(d3heatmap)
 library(officer)
 library(shiny)
 library(shinyalert)
 library(shinyBS)
 library(shinyjs)
 library(shinythemes)
+library(xlsx)
 
 options(stringsAsFactors=FALSE)
 

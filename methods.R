@@ -1,4 +1,3 @@
-library(d3heatmap)
 library(gplots)
 library(officer)
 library(VennDiagram)
@@ -23,7 +22,7 @@ calc_cmp_transcriptomics_traits=function(v){
 		tabPanel("Correlation with a trait", 			
 		isolate(selectInput("phen0", "Select Phenotype",choices=cn)),
 		radioButtons("corr_type", "Correlation coefficient:", c("Spearman" = "spearman","Pearson" = "pearson")),
-		radioButtons("multiple_test_correction", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni", "None" = "none")),
+		radioButtons("multiple_test_correction", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni")),
 		isolate(actionButton("go_alpha2", "Go!"))
 	))
 	appendTab(inputId = "tabset",
@@ -32,7 +31,7 @@ calc_cmp_transcriptomics_traits=function(v){
 		isolate(selectInput("phen2", "Phenotype-2",choices=cn)),
 		isolate(selectInput("phen3", "Phenotype-3",choices=cn)),
 		radioButtons("corr_type2", "Correlation coefficient:", c("Spearman" = "spearman","Pearson" = "pearson")),
-		radioButtons("multiple_test_correction2", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni", "None" = "none")),
+		radioButtons("multiple_test_correction2", "Multiple testing correction:", c("Benjamini-Hochberg (BH)"="BH","Bonferroni" = "bonferroni")),
 		radioButtons("significance_level", "Significance level:", c("0.001"=0.001,"0.05" = 0.05)),
 		isolate(actionButton("go_alpha3", "Go!"))
 	))

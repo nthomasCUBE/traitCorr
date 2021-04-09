@@ -1,9 +1,11 @@
-library(d3heatmap)
 library(shiny)
 library(shinyalert)
 library(shinyBS)
 library(shinyjs)
 library(shinythemes)
+library(officer)
+library(xlsx)
+
 
 options(stringsAsFactors=FALSE)
 options(shiny.maxRequestSize = 50*1024^2)
