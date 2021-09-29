@@ -7,15 +7,15 @@ library(xlsx)
 options(stringsAsFactors=FALSE)
 
 add_transcriptomics=function(){
-	print(c("INFO|add_transcriptomcis"))
+	base::print(c("INFO|add_transcriptomcis"))
 }
 
 add_trait_information=function(){
-	print(c("INFO|add_trait_information"))
+	base::print(c("INFO|add_trait_information"))
 }
 
 calc_cmp_transcriptomics_traits=function(v){
-	print(c("INFO|transcriptomics VS traits"))
+	base::print(c("INFO|transcriptomics VS traits"))
 	cn=c("---",colnames(v$trait))
 	cn2=c("---",v$transcriptomics[,1])
 	appendTab(inputId = "tabset",
@@ -64,7 +64,7 @@ calc_cmp_transcriptomics_traits=function(v){
 }
 
 cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
-	print("INFO|cmp_traits|start")
+	base::print("INFO|cmp_traits|start")
 
 	shinyjs::show("plot")
 	shinyjs::hide("plot2")
@@ -85,7 +85,7 @@ cmp_traits=function(v,my_trait1,my_trait2,my_trait3){
 	raw_p_val3=c()
 
 	for(x in 1:N){
-		print(paste0("INFO|cmp_traits|start",x,"|",N))
+		base::print(paste0("INFO|cmp_traits|start",x,"|",N))
 		if(my_trait1!="---"){
 			iy=which(colnames(v$trait)==my_trait1)
 			T1=as.numeric(v$trait[ix,iy])
@@ -326,11 +326,11 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2, phen62, phen72,
 		}
 	}
 	
-	print(summary(df))
+	base::print(summary(df))
 	o2=rownames(as.data.frame(o1))
-	print(o1)
-	print(o2)
-	print(length(o2))
+	base::print(o1)
+	base::print(o2)
+	base::print(length(o2))
 	if(length(o2)==4){
 		o2[2]=phen6
 		o2[3]=phen7
@@ -349,7 +349,7 @@ linear_model=function(v, phen6, phen7, phen8, opt1, opt2, gene2, phen62, phen72,
 }
 
 regr_analysis=function(v, my_trait1, my_gene1){
-	print("INFO|regr_analysis")
+	base::print("INFO|regr_analysis")
 	ix=which(my_gene1==v$transcriptomics[,1])
 
 	data1=v$transcriptomics
@@ -377,7 +377,7 @@ regr_analysis=function(v, my_trait1, my_gene1){
 
 make_corr=function(v,my_trait,output){
 
-	print("INFO|make_corr")
+	base::print("INFO|make_corr")
 
 	shinyjs::show("plot")
 	shinyjs::show("plot2")

@@ -47,7 +47,7 @@ server <- function(input, output, session)
 		for(i in 1:length(my_mod)){
 			nmb_genes=subset(v$module,v$module[,2]==my_mod[i])
 			nmb_genes=dim(nmb_genes)[1]
-			print(paste(my_mod[i],nmb_genes))
+			base::print(paste(my_mod[i],nmb_genes))
 		}
 
 		shinyalert("INFO", paste(dim(v$trait)[1],"gene-module assignments were uploaded!"), type = "info")
